@@ -11,7 +11,7 @@ Cerca recursively searches a website for links to other websites.
 The website must be static because a headless browser is not used.
 """
 
-tag_handlers = {
+TAG_HANDLERS = {
     'a': lambda el: el.get('href'),
     'form': lambda el: el.get('action'),
     'link': lambda el: el.get('href'),
@@ -27,7 +27,7 @@ def get_links(body):
     soup = BeautifulSoup(body, 'html.parser')
     return [ 
         h(link)
-        for tag, h in tag_handlers.items() for link in soup.find_all(tag)
+        for tag, h in TAG_HANDLERS.items() for link in soup.find_all(tag)
     ]
 
 def search(domain, blacklist):
@@ -50,7 +50,7 @@ def search(domain, blacklist):
             resp = requests.get(url.geturl())
             visited_urls.add(url)
             links = get_links(resp.text)
-            print('\tFound %d links', len(links))
+            print('\tFound %d links' % (len(links)))
             for l in links:
                 o = urlparse(l)
                 if l in visited_urls:
@@ -60,6 +60,6 @@ def search(domain, blacklist):
                 if o.netloc == netloc:
                     urls.put(o)
                 if o.netloc in blacklist:
-                    print('\tFound blacklisted link %s', o.geturl())
+                    print('\tFound blacklisted link %s' % (o.geturl()))
         except Exception as err:
             print("Search error :", err)
