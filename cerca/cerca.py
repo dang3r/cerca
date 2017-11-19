@@ -30,12 +30,11 @@ def get_links(body):
         for tag, h in TAG_HANDLERS.items() for link in soup.find_all(tag)
     ]
 
-def search(domain, blacklist):
+def search(domain):
     """
     Search a given domain for blacklisted urls
 
     :param domain: url to recursively search
-    :param blacklist: set of urls to check for
     """
     scheme = domain.scheme
     netloc = domain.netloc
@@ -46,11 +45,11 @@ def search(domain, blacklist):
     while not urls.empty():
         try:
             url = urls.get()
-            print('Retrieving', url.geturl())
-            resp = requests.get(url.geturl())
+            str_url = url.geturl()
+            resp = requests.get(str_url)
+            yield resp.status_code, str_url
             visited_urls.add(url)
             links = get_links(resp.text)
-            print('\tFound %d links' % (len(links)))
             for l in links:
                 o = urlparse(l)
                 if l in visited_urls:
@@ -59,7 +58,5 @@ def search(domain, blacklist):
                     o = urlparse(urlunparse((scheme, netloc) + o[2:]))
                 if o.netloc == netloc:
                     urls.put(o)
-                if o.netloc in blacklist:
-                    print('\tFound blacklisted link %s' % (o.geturl()))
         except Exception as err:
             print("Search error :", err)

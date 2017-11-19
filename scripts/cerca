@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 import cerca
 
 DESCRIPTION = """
-Cerca recursively searches a website for links to other websites.
+Cerca recursively searches a website for links.
 The website must be static because a headless browser is not used.
 """
 
@@ -14,16 +14,12 @@ def main():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
         "domain",
-        help="Website to search for blacklisted links",
+        help="Website to search",
         type=lambda arg: urlparse(arg),
     )
-    parser.add_argument(
-        "blacklist",
-        help="Blacklisted urls. Check if they are linked to from the website.",
-        type=lambda arg: {item for item in arg.split(",")},
-    )
     args = parser.parse_args()
-    cerca.search(args.domain, args.blacklist)
+    for code, url in cerca.search(args.domain):
+        print(code, url, flush=True)
     
 if __name__ == '__main__':
     main()
