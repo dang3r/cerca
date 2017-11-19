@@ -49,6 +49,8 @@ def search(domain):
             resp = requests.get(str_url)
             yield resp.status_code, str_url
             visited_urls.add(url)
+            if url.netloc != netloc:
+                continue
             links = get_links(resp.text)
             for l in links:
                 o = urlparse(l)
@@ -56,7 +58,6 @@ def search(domain):
                     continue
                 if o.netloc == '':
                     o = urlparse(urlunparse((scheme, netloc) + o[2:]))
-                if o.netloc == netloc:
-                    urls.put(o)
+                urls.put(o)
         except Exception as err:
             print("Search error :", err)

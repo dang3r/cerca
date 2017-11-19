@@ -2,24 +2,27 @@
 
 ----
 
-Cerca is a tool used to determine if any links on a given domain link a list of
+Cerca is a library and set of scripts used to determine if any links on a given domain link a list of
 blacklisted domains.
 
 ----
 
+## Install
+
+```
+pip3 install cerca
+```
+
 ## Example
 
 ```
-$ python3 cerca.py -h
-usage: cerca.py [-h] domain blacklist
-
-Cerca recursively searches a website for links to other websites. The website
-must be static because a headless browser is not used.
-
-positional arguments:
-  domain      Website to search for blacklisted links
-  blacklist   Blacklisted urls. Check if they are linked to from the website.
-
-optional arguments:
-  -h, --help  show this help message and exit
+$ cerca https://www.google.ca
+200 https://www.google.ca
+200 https://www.google.ca/preferences?hl=en
+200 https://www.google.ca/advanced_search?hl=en&authuser=0
+200 https://www.google.ca/language_tools?hl=en&authuser=0
+200 https://www.google.ca/intl/en/ads/
+200 https://www.google.ca/services/
+200 https://www.google.ca/intl/en/about.html
+...
 ```

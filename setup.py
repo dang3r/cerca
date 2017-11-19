@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="cerca",
-    version="0.2",
+    version="0.3",
     description="A library and utility for scanning static websites for links",
     url="https://github.com/dang3r/cerca",
     author="Daniel Cardoza",
